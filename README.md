@@ -1,7 +1,11 @@
 # uptimes
 Show Windows start up and shutdown times according to System Event Log
 
-# Example output
+## Download
+
+[Download from GitHub](https://github.com/larsch/uptimes/releases)
+
+## Example output
 
 ```
 Week 17   Mon 2016-04-25   09:15:33 - 16:14:05   (going to sleep)
