@@ -10,5 +10,6 @@ namespace uptimes
     {
         public const string KernelPower = "Microsoft-Windows-Kernel-Power";
         public const string KernelGeneral = "Microsoft-Windows-Kernel-General";
+        public const string PowerTroubleshooter = "Microsoft-Windows-Power-Troubleshooter";
     }
 }

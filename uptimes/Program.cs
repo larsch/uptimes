@@ -71,9 +71,19 @@ namespace uptimes
 
         private static EventType GetEventType(EventLogEntry entry)
         {
-            if (entry.Source == Source.KernelPower && entry.InstanceId == InstanceId.EnteringSleep)
+            if (entry.Source == Source.KernelPower)
             {
-                return EventType.EnteringSleep;
+                if (entry.InstanceId == InstanceId.EnteringSleep)
+                    return EventType.EnteringSleep;
+                else if (entry.InstanceId == InstanceId.ResumingFromSleep)
+                    return EventType.ResumingFromSleep;
+            }
+            else if (entry.Source == Source.PowerTroubleshooter)
+            {
+                if (entry.InstanceId == InstanceId.ReturnFromLowPower)
+                {
+                    return EventType.ResumingFromSleep;
+                }
             }
             else if (entry.Source == Source.KernelGeneral)
             {
@@ -100,6 +110,7 @@ namespace uptimes
             EventLogEntry[] entriesArray = new EventLogEntry[entries.Count];
             entries.CopyTo(entriesArray, 0);
             DateTime startTime = entriesArray.First().TimeGenerated;
+            bool started = true;
             bool sleeping = false;
 
             foreach (EventLogEntry entry in entriesArray)
@@ -107,14 +118,26 @@ namespace uptimes
                 switch (GetEventType(entry))
                 {
                     case EventType.StartingUp:
+                        if (started)
+                        {
+                            Program.PrintDate(startTime, entry.TimeGenerated, "unexpected restart");
+                        }
                         startTime = entry.TimeGenerated;
+                        started = true;
                         break;
                     case EventType.ShuttingDown:
                         Program.PrintDate(startTime, entry.TimeGenerated, "shutting down");
+                        started = false;
                         break;
                     case EventType.EnteringSleep:
                         sleeping = true;
                         Program.PrintDate(startTime, entry.TimeGenerated, "going to sleep");
+                        started = false;
+                        break;
+                    case EventType.ResumingFromSleep:
+                        sleeping = false;
+                        startTime = entry.TimeGenerated;
+                        started = true;
                         break;
                     case EventType.SystemTimeChanged:
                         if (sleeping)

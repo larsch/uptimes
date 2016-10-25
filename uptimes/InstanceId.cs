@@ -10,7 +10,9 @@ namespace uptimes
     {
         public const int StartUp = 12;
         public const int EnteringSleep = 42;
+        public const int ResumingFromSleep = 107;
         public const int ShuttingDown = 13;
         public const int SystemTimeChanged = 1;
+        public const int ReturnFromLowPower = 1;
     }
 }

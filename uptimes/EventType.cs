@@ -11,6 +11,7 @@ namespace uptimes
         StartingUp,
         ShuttingDown,
         EnteringSleep,
+        ResumingFromSleep,
         SystemTimeChanged,
         Other
     }
